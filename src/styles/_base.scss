@@ -1,0 +1,56 @@
+@use 'variables' as *;
+
+// Reset y estilos base
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family-base;
+  background-color: $color-alabaster;
+  color: $color-black;
+  overflow-x: hidden;
+}
+
+// Variables CSS personalizadas
+:root {
+  --color-black: #{$color-black};
+  --color-prussian-blue: #{$color-prussian-blue};
+  --color-orange: #{$color-orange};
+  --color-alabaster: #{$color-alabaster};
+  --color-white: #{$color-white};
+  --sidebar-width: #{$sidebar-width};
+  --navbar-height: #{$navbar-height};
+}
+
+// Scrollbar personalizado
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, $color-orange 0%, #e89500 100%);
+  border-radius: 10px;
+  
+  &:hover {
+    background: linear-gradient(180deg, #e89500 0%, $color-orange 100%);
+  }
+}
+
+// Tipografía base
+h2 {
+  font-weight: $font-weight-bold;
+  color: $color-prussian-blue;
+  margin-bottom: $spacing-md;
+}
+
+.container-fluid {
+  padding: $spacing-lg;
+}

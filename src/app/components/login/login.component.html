@@ -1,0 +1,42 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="logo">
+      <h1>🚗 Emproservis KIA</h1>
+      <p>Sistema de Gestión de Créditos</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          [(ngModel)]="email" 
+          name="email"
+          placeholder="tu@email.com"
+          required
+          [disabled]="loading">
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input 
+          type="password" 
+          id="password" 
+          [(ngModel)]="password" 
+          name="password"
+          placeholder="••••••••"
+          required
+          [disabled]="loading">
+      </div>
+
+      @if (error) {
+        <div class="error-message">{{ error }}</div>
+      }
+
+      <button type="submit" [disabled]="loading" class="btn-primary">
+        {{ loading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+      </button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,148 @@
+<div class="container-fluid">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">
+      <i class="bi bi-cloud-upload text-orange me-2"></i>
+      Subir Archivo Excel
+    </h2>
+    <button (click)="volver()" class="btn btn-outline-secondary">
+      <i class="bi bi-arrow-left me-2"></i>
+      Volver
+    </button>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-5">
+          <div 
+            class="upload-zone border border-2 border-dashed rounded-3 p-5 text-center"
+            [class.border-primary]="isDragging"
+            [class.bg-light]="isDragging"
+            (dragover)="onDragOver($event)" 
+            (drop)="onDrop($event)">
+            
+            <i class="bi bi-cloud-arrow-up text-primary" style="font-size: 4rem;"></i>
+            <h4 class="mt-3">Arrastra tu archivo Excel aquí</h4>
+            <p class="text-muted mb-3">o haz clic para seleccionar</p>
+            
+            <input 
+              type="file" 
+              #fileInput 
+              (change)="onFileSelected($event)" 
+              accept=".xlsx,.xls,.csv"
+              class="d-none">
+            
+            <button 
+              (click)="fileInput.click()" 
+              [disabled]="uploading" 
+              class="btn btn-primary">
+              <i class="bi bi-folder2-open me-2"></i>
+              Seleccionar Archivo
+            </button>
+            
+            <div class="mt-3">
+              <small class="text-muted">
+                <i class="bi bi-info-circle me-1"></i>
+                Formatos aceptados: .xlsx, .xls, .csv (máx. 50 MB)
+              </small>
+            </div>
+          </div>
+
+          @if (selectedFile) {
+            <div class="alert alert-info mt-4 d-flex align-items-center">
+              <i class="bi bi-file-earmark-excel fs-3 me-3"></i>
+              <div class="flex-grow-1">
+                <strong>{{ selectedFile.name }}</strong>
+                <div class="small text-muted">{{ formatFileSize(selectedFile.size) }}</div>
+              </div>
+              <button 
+                (click)="uploadFile()" 
+                [disabled]="uploading" 
+                class="btn btn-success">
+                <i class="bi bi-upload me-2"></i>
+                {{ uploading ? 'Subiendo...' : 'Subir Archivo' }}
+              </button>
+            </div>
+          }
+
+          @if (uploading) {
+            <div class="mt-4">
+              <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">Procesando archivo...</span>
+                <span class="text-muted">
+                  <i class="bi bi-hourglass-split"></i>
+                </span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div 
+                  class="progress-bar progress-bar-striped progress-bar-animated" 
+                  role="progressbar" 
+                  style="width: 100%">
+                </div>
+              </div>
+            </div>
+          }
+
+          @if (uploadResult) {
+            <div class="alert alert-success mt-4">
+              <div class="d-flex align-items-center mb-3">
+                <i class="bi bi-check-circle-fill fs-3 me-3"></i>
+                <div>
+                  <h5 class="mb-0">Archivo procesado exitosamente</h5>
+                  <small class="text-muted">El archivo se ha cargado y procesado correctamente</small>
+                </div>
+              </div>
+              
+              <div class="row g-3 mt-2">
+                <div class="col-md-4">
+                  <div class="card bg-white border-0">
+                    <div class="card-body text-center">
+                      <i class="bi bi-file-text text-primary fs-3"></i>
+                      <h4 class="mt-2 mb-0">{{ uploadResult.total_filas }}</h4>
+                      <small class="text-muted">Total de filas</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-white border-0">
+                    <div class="card-body text-center">
+                      <i class="bi bi-check-circle text-success fs-3"></i>
+                      <h4 class="mt-2 mb-0 text-success">{{ uploadResult.exitosas }}</h4>
+                      <small class="text-muted">Exitosas</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="card bg-white border-0">
+                    <div class="card-body text-center">
+                      <i class="bi bi-x-circle text-danger fs-3"></i>
+                      <h4 class="mt-2 mb-0 text-danger">{{ uploadResult.errores_parseo }}</h4>
+                      <small class="text-muted">Errores</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="text-center mt-3">
+                <button (click)="reset()" class="btn btn-primary">
+                  <i class="bi bi-arrow-clockwise me-2"></i>
+                  Subir otro archivo
+                </button>
+              </div>
+            </div>
+          }
+
+          @if (error) {
+            <div class="alert alert-danger mt-4 d-flex align-items-center">
+              <i class="bi bi-exclamation-triangle-fill fs-4 me-3"></i>
+              <div>
+                <strong>Error al procesar el archivo</strong>
+                <div class="small">{{ error }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

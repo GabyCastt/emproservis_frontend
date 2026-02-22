@@ -1,0 +1,79 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.navbar {
+  @include gradient-primary;
+  box-shadow: $shadow-md;
+  padding: 0.75rem $spacing-md;
+  min-height: auto;
+}
+
+.navbar-brand {
+  font-size: 1.25rem;
+  font-weight: $font-weight-bold;
+  color: white !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  i {
+    font-size: 1.5rem;
+    color: $color-orange;
+  }
+  
+  .d-flex.flex-column {
+    line-height: 1.2;
+    
+    span {
+      font-size: 1.1rem;
+    }
+    
+    small {
+      font-size: 0.65rem !important;
+      margin-top: -2px !important;
+      opacity: 0.85 !important;
+    }
+  }
+}
+
+.navbar .nav-link {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: $font-weight-medium;
+  padding: 0.4rem 0.75rem !important;
+  border-radius: $border-radius-sm;
+  transition: all $transition-normal;
+  font-size: 0.9rem;
+  
+  i {
+    font-size: 1rem;
+  }
+  
+  &:hover {
+    background-color: rgba(252, 163, 17, 0.15);
+    color: white !important;
+  }
+  
+  &.active {
+    background-color: rgba(252, 163, 17, 0.25);
+    color: $color-orange !important;
+  }
+}
+
+.navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.3);
+  padding: 0.25rem 0.5rem;
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(252, 163, 17, 0.25);
+  }
+}
+
+@include responsive(md) {
+  .navbar-brand {
+    font-size: 1rem;
+    
+    .d-flex.flex-column span {
+      font-size: 0.95rem;
+    }
+  }
+}

@@ -1,0 +1,66 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/animations' as *;
+
+.sidebar {
+  @include gradient-dark;
+  min-height: calc(100vh - 56px);
+  box-shadow: 2px 0 15px rgba(0, 0, 0, 0.2);
+  padding-top: 0;
+  position: sticky;
+  top: 56px;
+}
+
+.sidebar .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  padding: 0.875rem $spacing-md;
+  transition: all $transition-normal;
+  border-left: 4px solid transparent;
+  font-weight: $font-weight-medium;
+  animation: slideInLeft $transition-normal;
+  font-size: 0.95rem;
+  
+  i {
+    font-size: 1.1rem;
+    width: 24px;
+    color: $color-orange;
+  }
+  
+  &:hover {
+    background-color: rgba(252, 163, 17, 0.1);
+    color: white;
+    border-left-color: $color-orange;
+  }
+  
+  &.active {
+    background-color: rgba(252, 163, 17, 0.2);
+    border-left-color: $color-orange;
+    color: white;
+    
+    i {
+      color: $color-orange;
+    }
+  }
+  
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.1}s;
+    }
+  }
+}
+
+.border-bottom.border-secondary,
+.border-top.border-secondary {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+@include responsive(md) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 56px;
+    width: $sidebar-width;
+    z-index: 1000;
+    min-height: calc(100vh - 56px);
+  }
+}

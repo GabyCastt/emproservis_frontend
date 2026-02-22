@@ -1,0 +1,31 @@
+@use 'variables' as *;
+
+// Estilos de layout global
+
+// Asegurar que el sidebar siempre sea visible en desktop
+@media (min-width: $breakpoint-md) {
+  .col-md-3,
+  .col-lg-2 {
+    display: block !important;
+  }
+}
+
+// Ajustes para el contenido principal
+.row.g-0 {
+  > div {
+    transition: all $transition-normal;
+  }
+}
+
+// Asegurar altura completa
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}

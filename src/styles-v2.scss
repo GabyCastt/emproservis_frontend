@@ -1,0 +1,345 @@
+// ============================================
+// SISTEMA DE DISEÑO V2 - MODERNO Y PROFESIONAL
+// ============================================
+// Paleta: #000000, #14213d, #fca311, #e5e5e5, #ffffff
+
+// Importar archivos parciales en orden
+@use 'styles/variables-v2' as *;
+@use 'styles/mixins-v2' as *;
+@use 'styles/animations-v2';
+@use 'styles/components-v2';
+@use 'styles/utilities-v2';
+
+// ============================================
+// BASE STYLES
+// ============================================
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  line-height: $line-height-normal;
+  color: $color-gray-900;
+  background-color: $color-gray-50;
+  overflow-x: hidden;
+}
+
+// ============================================
+// VARIABLES CSS GLOBALES
+// ============================================
+
+:root {
+  // Colores
+  --color-black: #{$color-black};
+  --color-prussian-blue: #{$color-prussian-blue};
+  --color-orange: #{$color-orange};
+  --color-alabaster: #{$color-alabaster};
+  --color-white: #{$color-white};
+  
+  // Dimensiones
+  --sidebar-width: #{$sidebar-width};
+  --navbar-height: #{$navbar-height};
+  
+  // Transiciones
+  --transition-fast: #{$transition-fast};
+  --transition-normal: #{$transition-normal};
+  --transition-slow: #{$transition-slow};
+}
+
+// ============================================
+// SCROLLBAR PERSONALIZADO
+// ============================================
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: $color-gray-100;
+  border-radius: $border-radius-full;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, $color-orange 0%, $color-orange-dark 100%);
+  border-radius: $border-radius-full;
+  border: 2px solid $color-gray-100;
+  
+  &:hover {
+    background: linear-gradient(180deg, $color-orange-dark 0%, $color-orange 100%);
+  }
+}
+
+// ============================================
+// TIPOGRAFÍA BASE
+// ============================================
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-display;
+  font-weight: $font-weight-bold;
+  line-height: $line-height-tight;
+  color: $color-prussian-blue;
+  margin-bottom: $spacing-4;
+}
+
+h1 { font-size: $font-size-4xl; }
+h2 { font-size: $font-size-3xl; }
+h3 { font-size: $font-size-2xl; }
+h4 { font-size: $font-size-xl; }
+h5 { font-size: $font-size-lg; }
+h6 { font-size: $font-size-base; }
+
+p {
+  margin-bottom: $spacing-4;
+  line-height: $line-height-relaxed;
+}
+
+a {
+  color: $color-orange;
+  text-decoration: none;
+  transition: color $transition-fast;
+  
+  &:hover {
+    color: $color-orange-dark;
+    text-decoration: underline;
+  }
+}
+
+// ============================================
+// LAYOUT GLOBAL
+// ============================================
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 $spacing-6;
+}
+
+.container-fluid {
+  width: 100%;
+  padding: 0 $spacing-6;
+}
+
+// ============================================
+// GRID SYSTEM
+// ============================================
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 (-$spacing-3);
+}
+
+.col {
+  flex: 1;
+  padding: 0 $spacing-3;
+}
+
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 percentage($i / 12);
+    max-width: percentage($i / 12);
+    padding: 0 $spacing-3;
+  }
+}
+
+// ============================================
+// COMPONENTES ESPECÍFICOS DE LAYOUT
+// ============================================
+
+// Navbar moderno
+.navbar-modern {
+  @include gradient-primary;
+  height: $navbar-height;
+  padding: 0 $spacing-6;
+  @include flex-between;
+  box-shadow: $shadow-md;
+  position: sticky;
+  top: 0;
+  z-index: $z-sticky;
+  backdrop-filter: blur(10px);
+  
+  .navbar-brand {
+    @include flex-center;
+    gap: $spacing-3;
+    color: $color-white;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    
+    i {
+      font-size: $font-size-3xl;
+      color: $color-orange;
+    }
+  }
+  
+  .navbar-nav {
+    @include flex-center;
+    gap: $spacing-2;
+    list-style: none;
+    
+    .nav-link {
+      @include flex-center;
+      gap: $spacing-2;
+      padding: $spacing-2 $spacing-4;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: $font-weight-medium;
+      border-radius: $border-radius-lg;
+      transition: all $transition-normal;
+      
+      &:hover {
+        background: rgba(252, 163, 17, 0.15);
+        color: $color-white;
+        text-decoration: none;
+      }
+      
+      &.active {
+        background: rgba(252, 163, 17, 0.25);
+        color: $color-orange;
+      }
+    }
+  }
+}
+
+// Sidebar moderno
+.sidebar-modern {
+  @include gradient-dark;
+  width: $sidebar-width;
+  min-height: calc(100vh - $navbar-height);
+  padding: $spacing-6 0;
+  box-shadow: $shadow-lg;
+  position: sticky;
+  top: $navbar-height;
+  
+  .sidebar-header {
+    padding: 0 $spacing-6 $spacing-6;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    h6 {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: $font-size-xs;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin: 0;
+    }
+  }
+  
+  .sidebar-nav {
+    padding: $spacing-4 0;
+    
+    .nav-link {
+      @include flex-center;
+      justify-content: flex-start;
+      gap: $spacing-4;
+      padding: $spacing-4 $spacing-6;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: $font-weight-medium;
+      border-left: 3px solid transparent;
+      transition: all $transition-normal;
+      
+      i {
+        font-size: $font-size-lg;
+        color: $color-orange;
+        width: 24px;
+        text-align: center;
+      }
+      
+      &:hover {
+        background: rgba(252, 163, 17, 0.1);
+        border-left-color: $color-orange;
+        color: $color-white;
+        text-decoration: none;
+      }
+      
+      &.active {
+        background: rgba(252, 163, 17, 0.2);
+        border-left-color: $color-orange;
+        color: $color-white;
+      }
+    }
+  }
+  
+  .sidebar-footer {
+    padding: $spacing-6;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: auto;
+    
+    .version {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: $font-size-xs;
+    }
+  }
+}
+
+// ============================================
+// RESPONSIVE
+// ============================================
+
+@include responsive(lg) {
+  .navbar-modern {
+    padding: 0 $spacing-4;
+  }
+  
+  .sidebar-modern {
+    width: $sidebar-collapsed-width;
+    
+    .sidebar-nav .nav-link span {
+      display: none;
+    }
+  }
+}
+
+@include responsive(md) {
+  h1 { font-size: $font-size-3xl; }
+  h2 { font-size: $font-size-2xl; }
+  h3 { font-size: $font-size-xl; }
+  
+  .container,
+  .container-fluid {
+    padding: 0 $spacing-4;
+  }
+}
+
+@include responsive(sm) {
+  .navbar-modern {
+    padding: 0 $spacing-3;
+    
+    .navbar-brand {
+      font-size: $font-size-lg;
+    }
+  }
+}
+
+// ============================================
+// PRINT STYLES
+// ============================================
+
+@media print {
+  .navbar-modern,
+  .sidebar-modern,
+  .btn,
+  .badge {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}

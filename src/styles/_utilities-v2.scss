@@ -1,0 +1,237 @@
+// ============================================
+// UTILIDADES V2 - DISEÑO MODERNO
+// ============================================
+@use 'variables-v2' as *;
+
+// ============================================
+// COLORES
+// ============================================
+.text-primary { color: $color-orange !important; }
+.text-secondary { color: $color-prussian-blue !important; }
+.text-success { color: $color-success !important; }
+.text-warning { color: $color-warning !important; }
+.text-danger { color: $color-danger !important; }
+.text-info { color: $color-info !important; }
+.text-muted { color: $color-gray-500 !important; }
+.text-white { color: $color-white !important; }
+.text-black { color: $color-black !important; }
+
+.bg-primary { background-color: $color-orange !important; }
+.bg-secondary { background-color: $color-prussian-blue !important; }
+.bg-success { background-color: $color-success !important; }
+.bg-warning { background-color: $color-warning !important; }
+.bg-danger { background-color: $color-danger !important; }
+.bg-info { background-color: $color-info !important; }
+.bg-light { background-color: $color-gray-50 !important; }
+.bg-dark { background-color: $color-gray-900 !important; }
+.bg-white { background-color: $color-white !important; }
+.bg-transparent { background-color: transparent !important; }
+
+// ============================================
+// BORDES
+// ============================================
+.border { border: 1px solid $color-gray-200 !important; }
+.border-0 { border: 0 !important; }
+.border-top { border-top: 1px solid $color-gray-200 !important; }
+.border-bottom { border-bottom: 1px solid $color-gray-200 !important; }
+.border-left { border-left: 1px solid $color-gray-200 !important; }
+.border-right { border-right: 1px solid $color-gray-200 !important; }
+
+.border-primary { border-color: $color-orange !important; }
+.border-secondary { border-color: $color-prussian-blue !important; }
+
+.rounded { border-radius: $border-radius-md !important; }
+.rounded-sm { border-radius: $border-radius-sm !important; }
+.rounded-lg { border-radius: $border-radius-lg !important; }
+.rounded-xl { border-radius: $border-radius-xl !important; }
+.rounded-2xl { border-radius: $border-radius-2xl !important; }
+.rounded-full { border-radius: $border-radius-full !important; }
+.rounded-0 { border-radius: 0 !important; }
+
+// ============================================
+// SOMBRAS
+// ============================================
+.shadow-none { box-shadow: none !important; }
+.shadow-xs { box-shadow: $shadow-xs !important; }
+.shadow-sm { box-shadow: $shadow-sm !important; }
+.shadow-md { box-shadow: $shadow-md !important; }
+.shadow-lg { box-shadow: $shadow-lg !important; }
+.shadow-xl { box-shadow: $shadow-xl !important; }
+.shadow-2xl { box-shadow: $shadow-2xl !important; }
+.shadow-inner { box-shadow: $shadow-inner !important; }
+.shadow-orange { box-shadow: $shadow-orange !important; }
+.shadow-blue { box-shadow: $shadow-blue !important; }
+
+// ============================================
+// ESPACIADO
+// ============================================
+@each $size, $value in (
+  1: $spacing-1,
+  2: $spacing-2,
+  3: $spacing-3,
+  4: $spacing-4,
+  5: $spacing-5,
+  6: $spacing-6,
+  8: $spacing-8,
+  10: $spacing-10,
+  12: $spacing-12,
+  16: $spacing-16
+) {
+  .m-#{$size} { margin: $value !important; }
+  .mt-#{$size} { margin-top: $value !important; }
+  .mb-#{$size} { margin-bottom: $value !important; }
+  .ml-#{$size} { margin-left: $value !important; }
+  .mr-#{$size} { margin-right: $value !important; }
+  .mx-#{$size} { margin-left: $value !important; margin-right: $value !important; }
+  .my-#{$size} { margin-top: $value !important; margin-bottom: $value !important; }
+  
+  .p-#{$size} { padding: $value !important; }
+  .pt-#{$size} { padding-top: $value !important; }
+  .pb-#{$size} { padding-bottom: $value !important; }
+  .pl-#{$size} { padding-left: $value !important; }
+  .pr-#{$size} { padding-right: $value !important; }
+  .px-#{$size} { padding-left: $value !important; padding-right: $value !important; }
+  .py-#{$size} { padding-top: $value !important; padding-bottom: $value !important; }
+}
+
+.m-auto { margin: auto !important; }
+.mx-auto { margin-left: auto !important; margin-right: auto !important; }
+.my-auto { margin-top: auto !important; margin-bottom: auto !important; }
+
+// ============================================
+// TIPOGRAFÍA
+// ============================================
+.font-light { font-weight: $font-weight-light !important; }
+.font-normal { font-weight: $font-weight-normal !important; }
+.font-medium { font-weight: $font-weight-medium !important; }
+.font-semibold { font-weight: $font-weight-semibold !important; }
+.font-bold { font-weight: $font-weight-bold !important; }
+.font-extrabold { font-weight: $font-weight-extrabold !important; }
+
+.text-xs { font-size: $font-size-xs !important; }
+.text-sm { font-size: $font-size-sm !important; }
+.text-base { font-size: $font-size-base !important; }
+.text-lg { font-size: $font-size-lg !important; }
+.text-xl { font-size: $font-size-xl !important; }
+.text-2xl { font-size: $font-size-2xl !important; }
+.text-3xl { font-size: $font-size-3xl !important; }
+.text-4xl { font-size: $font-size-4xl !important; }
+.text-5xl { font-size: $font-size-5xl !important; }
+
+.text-left { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-right { text-align: right !important; }
+
+.text-uppercase { text-transform: uppercase !important; }
+.text-lowercase { text-transform: lowercase !important; }
+.text-capitalize { text-transform: capitalize !important; }
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ============================================
+// DISPLAY
+// ============================================
+.d-none { display: none !important; }
+.d-block { display: block !important; }
+.d-inline { display: inline !important; }
+.d-inline-block { display: inline-block !important; }
+.d-flex { display: flex !important; }
+.d-inline-flex { display: inline-flex !important; }
+.d-grid { display: grid !important; }
+
+// ============================================
+// FLEXBOX
+// ============================================
+.flex-row { flex-direction: row !important; }
+.flex-column { flex-direction: column !important; }
+.flex-wrap { flex-wrap: wrap !important; }
+.flex-nowrap { flex-wrap: nowrap !important; }
+
+.justify-start { justify-content: flex-start !important; }
+.justify-center { justify-content: center !important; }
+.justify-end { justify-content: flex-end !important; }
+.justify-between { justify-content: space-between !important; }
+.justify-around { justify-content: space-around !important; }
+
+.items-start { align-items: flex-start !important; }
+.items-center { align-items: center !important; }
+.items-end { align-items: flex-end !important; }
+.items-stretch { align-items: stretch !important; }
+
+.gap-1 { gap: $spacing-1 !important; }
+.gap-2 { gap: $spacing-2 !important; }
+.gap-3 { gap: $spacing-3 !important; }
+.gap-4 { gap: $spacing-4 !important; }
+.gap-6 { gap: $spacing-6 !important; }
+.gap-8 { gap: $spacing-8 !important; }
+
+// ============================================
+// POSICIONAMIENTO
+// ============================================
+.position-relative { position: relative !important; }
+.position-absolute { position: absolute !important; }
+.position-fixed { position: fixed !important; }
+.position-sticky { position: sticky !important; }
+
+// ============================================
+// OVERFLOW
+// ============================================
+.overflow-auto { overflow: auto !important; }
+.overflow-hidden { overflow: hidden !important; }
+.overflow-visible { overflow: visible !important; }
+.overflow-scroll { overflow: scroll !important; }
+
+// ============================================
+// OPACIDAD
+// ============================================
+.opacity-0 { opacity: 0 !important; }
+.opacity-25 { opacity: 0.25 !important; }
+.opacity-50 { opacity: 0.5 !important; }
+.opacity-75 { opacity: 0.75 !important; }
+.opacity-100 { opacity: 1 !important; }
+
+// ============================================
+// CURSOR
+// ============================================
+.cursor-pointer { cursor: pointer !important; }
+.cursor-not-allowed { cursor: not-allowed !important; }
+.cursor-default { cursor: default !important; }
+
+// ============================================
+// WIDTH & HEIGHT
+// ============================================
+.w-full { width: 100% !important; }
+.w-auto { width: auto !important; }
+.h-full { height: 100% !important; }
+.h-auto { height: auto !important; }
+
+// ============================================
+// INTERACTIVIDAD
+// ============================================
+.hover-lift {
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.hover-scale {
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.hover-opacity {
+  transition: opacity 0.3s ease;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}

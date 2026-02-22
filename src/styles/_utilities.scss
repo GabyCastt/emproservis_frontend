@@ -1,0 +1,54 @@
+@use 'variables' as *;
+
+// Clases de utilidad personalizadas
+
+// Colores de texto
+.text-orange {
+  color: $color-orange !important;
+}
+
+.text-prussian {
+  color: $color-prussian-blue !important;
+}
+
+// Colores de fondo
+.bg-orange {
+  background-color: $color-orange !important;
+}
+
+.bg-prussian {
+  background-color: $color-prussian-blue !important;
+}
+
+// Bordes
+.border-orange {
+  border-color: $color-orange !important;
+}
+
+// Sombras personalizadas
+.shadow-orange {
+  box-shadow: 0 4px 15px rgba(252, 163, 17, 0.3) !important;
+}
+
+// Opacidades de fondo
+.bg-primary.bg-opacity-10 {
+  background-color: rgba(252, 163, 17, 0.1) !important;
+}
+
+// Override de colores de Bootstrap
+.text-primary {
+  color: $color-orange !important;
+}
+
+.text-warning {
+  color: $color-orange !important;
+}
+
+.bg-warning {
+  background-color: $color-orange !important;
+  color: $color-black !important;
+}
+
+.spinner-border.text-primary {
+  color: $color-orange !important;
+}

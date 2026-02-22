@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" routerLink="/dashboard">
+      <i class="bi bi-car-front-fill me-2"></i>
+      <div class="d-flex flex-column">
+        <span class="fw-bold">Emproservis</span>
+        <small style="font-size: 0.7rem; margin-top: -5px; opacity: 0.9;">Sistema de Créditos KIA</small>
+      </div>
+    </a>
+    
+    <button class="navbar-toggler" type="button" (click)="toggleSidebar()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" routerLink="/dashboard" routerLinkActive="active">
+            <i class="bi bi-speedometer2 me-2"></i>
+            Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" routerLink="/solicitudes" routerLinkActive="active">
+            <i class="bi bi-file-text me-2"></i>
+            Solicitudes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link d-flex align-items-center" routerLink="/upload" routerLinkActive="active">
+            <i class="bi bi-cloud-upload me-2"></i>
+            Subir Excel
+          </a>
+        </li>
+        <li class="nav-item ms-3">
+          <div class="d-flex align-items-center text-white">
+            <i class="bi bi-person-circle fs-4"></i>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

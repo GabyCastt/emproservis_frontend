@@ -1,0 +1,18 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+.upload-zone {
+  cursor: pointer;
+  transition: all $transition-normal;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  
+  &:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #f8f9fa 100%);
+    border-color: $color-orange !important;
+  }
+  
+  &.border-primary {
+    border-color: $color-orange !important;
+    background: linear-gradient(135deg, #fff9e6 0%, #ffe5b3 100%);
+  }
+}

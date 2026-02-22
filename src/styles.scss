@@ -1,0 +1,11 @@
+// Importar archivos parciales en orden
+@use 'styles/variables';
+@use 'styles/mixins';
+@use 'styles/base';
+@use 'styles/animations';
+@use 'styles/layout';
+@use 'styles/components';
+@use 'styles/utilities';
+
+// Estilos específicos de layout (navbar y sidebar)
+// Estos se mantienen aquí porque son específicos del layout principal

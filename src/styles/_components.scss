@@ -1,0 +1,184 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// Estilos de componentes Bootstrap personalizados
+
+// Cards
+.card {
+  border: none;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+  @include card-hover;
+  overflow: hidden;
+  animation: fadeIn $transition-slow;
+}
+
+.card-body {
+  padding: $spacing-md;
+}
+
+// Botones
+.btn {
+  font-weight: $font-weight-semibold;
+  padding: 0.625rem $spacing-md;
+  border-radius: $border-radius-md;
+  border: none;
+  @include button-hover;
+}
+
+.btn-primary {
+  @include gradient-secondary;
+  color: $color-black;
+  
+  &:hover {
+    background: linear-gradient(135deg, #e89500 0%, $color-orange 100%);
+    color: $color-black;
+  }
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+  
+  &:hover {
+    background: linear-gradient(135deg, #146c43 0%, #198754 100%);
+  }
+}
+
+.btn-outline-secondary {
+  border: 2px solid $color-prussian-blue;
+  color: $color-prussian-blue;
+  
+  &:hover {
+    background: $color-prussian-blue;
+    color: white;
+  }
+}
+
+.btn-outline-primary {
+  border: 2px solid $color-orange;
+  color: $color-orange;
+  
+  &:hover {
+    background: $color-orange;
+    color: $color-black;
+  }
+}
+
+// Formularios
+.form-control,
+.form-select {
+  border: 2px solid $color-alabaster;
+  border-radius: $border-radius-md;
+  padding: 0.75rem $spacing-sm;
+  transition: all $transition-normal;
+  @include focus-ring;
+}
+
+.form-label {
+  font-weight: $font-weight-semibold;
+  color: $color-prussian-blue;
+  margin-bottom: $spacing-xs;
+  
+  i {
+    color: $color-orange;
+  }
+}
+
+// Tablas
+.table {
+  font-size: 0.9rem;
+  
+  thead {
+    @include gradient-primary;
+    
+    th {
+      font-weight: $font-weight-semibold;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+      color: $color-white;
+      border: none;
+      padding: $spacing-sm;
+      
+      i {
+        color: $color-orange;
+      }
+    }
+  }
+  
+  tbody {
+    tr {
+      transition: all $transition-fast;
+      border-bottom: 1px solid #f0f0f0;
+      
+      &:hover {
+        background-color: rgba(252, 163, 17, 0.05);
+        transform: scale(1.005);
+      }
+      
+      td {
+        padding: $spacing-sm;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+// Badges
+.badge {
+  padding: $spacing-xs $spacing-sm;
+  font-weight: $font-weight-semibold;
+  font-size: 0.75rem;
+  border-radius: 2rem;
+  letter-spacing: 0.3px;
+}
+
+// Alerts
+.alert {
+  border: none;
+  border-radius: $border-radius-lg;
+  padding: 1.25rem;
+  
+  &.alert-success {
+    background: linear-gradient(135deg, #d1e7dd 0%, #badbcc 100%);
+    color: #0f5132;
+  }
+  
+  &.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f1aeb5 100%);
+    color: #842029;
+  }
+  
+  &.alert-info {
+    background: linear-gradient(135deg, #cfe2ff 0%, #b6d4fe 100%);
+    color: #084298;
+  }
+}
+
+// Progress bar
+.progress {
+  height: 0.75rem;
+  border-radius: $border-radius-xl;
+  background-color: $color-alabaster;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, $color-orange 0%, #ffb84d 100%);
+}
+
+// Spinner
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3rem;
+}
+
+// Hover effects para iconos
+i {
+  transition: all $transition-normal;
+}
+
+.card:hover i {
+  transform: scale(1.1);
+}

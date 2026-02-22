@@ -1,0 +1,56 @@
+// Mixins reutilizables
+@use 'variables' as *;
+
+@mixin gradient-primary {
+  background: linear-gradient(135deg, $color-prussian-blue 0%, #0a1428 100%);
+}
+
+@mixin gradient-secondary {
+  background: linear-gradient(135deg, $color-orange 0%, #e89500 100%);
+}
+
+@mixin gradient-dark {
+  background: linear-gradient(180deg, $color-black 0%, $color-prussian-blue 100%);
+}
+
+@mixin card-hover {
+  transition: all $transition-normal;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+@mixin button-hover {
+  transition: all $transition-normal;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@mixin focus-ring($color: $color-orange) {
+  &:focus {
+    outline: none;
+    border-color: $color;
+    box-shadow: 0 0 0 0.2rem rgba($color, 0.15);
+  }
+}
+
+@mixin responsive($breakpoint) {
+  @if $breakpoint == sm {
+    @media (max-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == md {
+    @media (max-width: $breakpoint-md) { @content; }
+  } @else if $breakpoint == lg {
+    @media (max-width: $breakpoint-lg) { @content; }
+  } @else if $breakpoint == xl {
+    @media (max-width: $breakpoint-xl) { @content; }
+  }
+}

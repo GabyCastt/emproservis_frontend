@@ -1,0 +1,108 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/animations' as *;
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include gradient-primary;
+  padding: $spacing-lg;
+  animation: fadeIn $transition-slow;
+}
+
+.login-card {
+  background: $color-white;
+  border-radius: $border-radius-xl;
+  padding: $spacing-xl;
+  box-shadow: $shadow-xl;
+  max-width: 400px;
+  width: 100%;
+  animation: slideInRight $transition-slow;
+}
+
+.logo {
+  text-align: center;
+  margin-bottom: $spacing-lg;
+
+  h1 {
+    font-size: 1.75rem;
+    margin: 0 0 $spacing-xs 0;
+    color: $color-prussian-blue;
+    font-weight: $font-weight-bold;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+    font-size: 0.875rem;
+  }
+}
+
+.login-form {
+  .form-group {
+    margin-bottom: $spacing-lg;
+
+    label {
+      display: block;
+      margin-bottom: $spacing-xs;
+      color: $color-prussian-blue;
+      font-weight: $font-weight-medium;
+      font-size: 0.875rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem $spacing-sm;
+      border: 2px solid $color-alabaster;
+      border-radius: $border-radius-md;
+      font-size: 0.875rem;
+      transition: border-color $transition-normal;
+      box-sizing: border-box;
+      @include focus-ring($color-orange);
+
+      &:disabled {
+        background: #f5f5f5;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .error-message {
+    background: #fee;
+    color: #c33;
+    padding: 0.75rem $spacing-sm;
+    border-radius: $border-radius-md;
+    margin-bottom: $spacing-lg;
+    font-size: 0.875rem;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 0.875rem;
+    @include gradient-secondary;
+    color: $color-black;
+    border: none;
+    border-radius: $border-radius-md;
+    font-size: 1rem;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    @include button-hover;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+}
+
+@include responsive(md) {
+  .login-container {
+    padding: $spacing-sm;
+  }
+  
+  .login-card {
+    padding: $spacing-lg;
+  }
+}

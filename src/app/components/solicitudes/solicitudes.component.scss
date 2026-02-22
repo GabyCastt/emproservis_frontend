@@ -1,0 +1,23 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+
+// Estilos específicos del componente de solicitudes
+.solicitudes-container {
+  animation: fadeIn $transition-slow;
+}
+
+// Mejoras para la tabla de solicitudes
+.table-responsive {
+  border-radius: $border-radius-lg;
+  overflow: hidden;
+  box-shadow: $shadow-sm;
+}
+
+// Estilos para filtros
+.filter-section {
+  background: $color-white;
+  padding: $spacing-md;
+  border-radius: $border-radius-lg;
+  box-shadow: $shadow-sm;
+  margin-bottom: $spacing-md;
+}

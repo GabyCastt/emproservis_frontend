@@ -1,0 +1,80 @@
+@use '../../../styles/variables' as *;
+@use '../../../styles/mixins' as *;
+@use '../../../styles/animations' as *;
+
+.dashboard-wrapper {
+  animation: fadeIn $transition-slow;
+}
+
+.action-card {
+  transition: all $transition-normal;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+  }
+}
+
+.icon-wrapper {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  
+  i {
+    font-size: 2.5rem;
+    transition: transform $transition-normal;
+  }
+}
+
+.kpi-card {
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    @include gradient-secondary;
+  }
+  
+  .bg-opacity-10 {
+    padding: 1.25rem;
+  }
+  
+  h3 {
+    font-size: 2rem;
+    font-weight: $font-weight-bold;
+    margin: 0;
+  }
+  
+  h6 {
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: $font-weight-semibold;
+  }
+}
+
+@include responsive(md) {
+  .icon-wrapper {
+    width: 60px;
+    height: 60px;
+    
+    i {
+      font-size: 2rem;
+    }
+  }
+  
+  .kpi-card {
+    h3 {
+      font-size: 1.5rem;
+    }
+  }
+}

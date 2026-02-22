@@ -1,0 +1,599 @@
+<div class="dashboard-wrapper">
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="mb-1 d-flex align-items-center">
+        <i class="bi bi-speedometer2 text-orange me-3"></i>
+        Dashboard Ejecutivo
+      </h2>
+      <p class="text-muted mb-0">Sistema de Gestión de Créditos KIA</p>
+    </div>
+    <button class="btn btn-outline-primary" (click)="cargarDatos()">
+      <i class="bi bi-arrow-clockwise me-2"></i>
+      Actualizar
+    </button>
+  </div>
+
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="text-muted">Cargando datos del dashboard...</p>
+    </div>
+  }
+
+  @if (kpis) {
+    <!-- KPIs Principales - Fila 1 -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100 kpi-card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="bg-primary bg-opacity-10 rounded-3 p-3">
+                  <i class="bi bi-file-text-fill text-primary fs-1"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="text-muted mb-1 small">Total Solicitudes</h6>
+                <h3 class="mb-0 text-primary fw-bold">{{ kpis.total_solicitudes }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100 kpi-card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="bg-success bg-opacity-10 rounded-3 p-3">
+                  <i class="bi bi-check-circle-fill text-success fs-1"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="text-muted mb-1 small">Aprobadas</h6>
+                <h3 class="mb-0 text-success fw-bold">{{ kpis.aprobadas }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100 kpi-card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                  <i class="bi bi-clock-fill text-warning fs-1"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="text-muted mb-1 small">Pendientes</h6>
+                <h3 class="mb-0 text-warning fw-bold">{{ kpis.pendientes }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100 kpi-card">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="bg-danger bg-opacity-10 rounded-3 p-3">
+                  <i class="bi bi-x-circle-fill text-danger fs-1"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="text-muted mb-1 small">Rechazadas</h6>
+                <h3 class="mb-0 text-danger fw-bold">{{ kpis.rechazadas }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs Secundarios - Fila 2 -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="bg-info bg-opacity-10 rounded-3 p-2">
+                  <i class="bi bi-eye-fill text-info fs-3"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="text-muted mb-1 small">En Revisión</h6>
+                <h4 class="mb-0 text-info fw-bold">{{ kpis.en_revision }}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="bg-success bg-opacity-10 rounded-3 p-2">
+                  <i class="bi bi-cash-coin text-success fs-3"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="text-muted mb-1 small">Desembolsadas</h6>
+                <h4 class="mb-0 text-success fw-bold">{{ kpis.desembolsadas }}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="bg-secondary bg-opacity-10 rounded-3 p-2">
+                  <i class="bi bi-x-octagon text-secondary fs-3"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="text-muted mb-1 small">Canceladas</h6>
+                <h4 class="mb-0 text-secondary fw-bold">{{ kpis.canceladas }}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 col-xl-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <div class="flex-shrink-0">
+                <div class="bg-primary bg-opacity-10 rounded-3 p-2">
+                  <i class="bi bi-graph-up-arrow text-primary fs-3"></i>
+                </div>
+              </div>
+              <div class="flex-grow-1 ms-3">
+                <h6 class="text-muted mb-1 small">Tasa Aprobación</h6>
+                <h4 class="mb-0 text-primary fw-bold">{{ formatPorcentaje(kpis.tasa_aprobacion) }}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Métricas Financieras y Operativas -->
+    <div class="row g-3 mb-4">
+      <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-currency-dollar text-success fs-1 mb-2"></i>
+            <h6 class="text-muted small mb-2">Monto Total Aprobado</h6>
+            <h4 class="mb-0 text-success fw-bold">{{ formatMoneda(kpis.monto_total_aprobado) }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-wallet2 text-primary fs-1 mb-2"></i>
+            <h6 class="text-muted small mb-2">Monto Promedio</h6>
+            <h4 class="mb-0 text-primary fw-bold">{{ formatMoneda(kpis.monto_promedio_solicitado) }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-people-fill text-info fs-1 mb-2"></i>
+            <h6 class="text-muted small mb-2">Clientes Únicos</h6>
+            <h4 class="mb-0 text-info fw-bold">{{ kpis.clientes_unicos }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-6">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center">
+            <i class="bi bi-person-badge text-warning fs-1 mb-2"></i>
+            <h6 class="text-muted small mb-2">Asesores Activos</h6>
+            <h4 class="mb-0 text-warning fw-bold">{{ kpis.asesores_activos }}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Distribución de Estados -->
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0">
+              <i class="bi bi-pie-chart me-2 text-primary"></i>
+              Distribución de Solicitudes por Estado
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-semibold">Aprobadas</span>
+                    <span class="small text-success fw-bold">{{ kpis.aprobadas }} ({{ formatPorcentaje(getProgressWidth(kpis.aprobadas, kpis.total_solicitudes)) }})</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-success" [style.width.%]="getProgressWidth(kpis.aprobadas, kpis.total_solicitudes)"></div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-semibold">Pendientes</span>
+                    <span class="small text-warning fw-bold">{{ kpis.pendientes }} ({{ formatPorcentaje(getProgressWidth(kpis.pendientes, kpis.total_solicitudes)) }})</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-warning" [style.width.%]="getProgressWidth(kpis.pendientes, kpis.total_solicitudes)"></div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-semibold">Rechazadas</span>
+                    <span class="small text-danger fw-bold">{{ kpis.rechazadas }} ({{ formatPorcentaje(getProgressWidth(kpis.rechazadas, kpis.total_solicitudes)) }})</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-danger" [style.width.%]="getProgressWidth(kpis.rechazadas, kpis.total_solicitudes)"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-semibold">En Revisión</span>
+                    <span class="small text-info fw-bold">{{ kpis.en_revision }} ({{ formatPorcentaje(getProgressWidth(kpis.en_revision, kpis.total_solicitudes)) }})</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-info" [style.width.%]="getProgressWidth(kpis.en_revision, kpis.total_solicitudes)"></div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-semibold">Desembolsadas</span>
+                    <span class="small text-success fw-bold">{{ kpis.desembolsadas }} ({{ formatPorcentaje(getProgressWidth(kpis.desembolsadas, kpis.total_solicitudes)) }})</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-success" [style.width.%]="getProgressWidth(kpis.desembolsadas, kpis.total_solicitudes)"></div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between mb-1">
+                    <span class="small fw-semibold">Canceladas</span>
+                    <span class="small text-secondary fw-bold">{{ kpis.canceladas }} ({{ formatPorcentaje(getProgressWidth(kpis.canceladas, kpis.total_solicitudes)) }})</span>
+                  </div>
+                  <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-secondary" [style.width.%]="getProgressWidth(kpis.canceladas, kpis.total_solicitudes)"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Tendencias y Rankings -->
+  <div class="row g-3 mb-4">
+    <!-- Tendencias Mensuales -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0">
+            <i class="bi bi-graph-up me-2 text-primary"></i>
+            Tendencias Mensuales (Últimos 12 Meses)
+          </h5>
+        </div>
+        <div class="card-body">
+          @if (loadingTendencias) {
+            <div class="text-center py-4">
+              <div class="spinner-border spinner-border-sm text-primary"></div>
+              <p class="text-muted small mt-2">Cargando tendencias...</p>
+            </div>
+          } @else if (tendenciasAgrupadas.length > 0) {
+            <div class="table-responsive">
+              <table class="table table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th>Mes</th>
+                    <th class="text-end">Total</th>
+                    <th class="text-end">Aprobadas</th>
+                    <th class="text-end">Rechazadas</th>
+                    <th class="text-end">Pendientes</th>
+                    <th class="text-end">Tasa</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (tendencia of tendenciasAgrupadas; track tendencia.mes) {
+                    <tr>
+                      <td class="fw-semibold">{{ formatearMesNombre(tendencia.mes) }}</td>
+                      <td class="text-end">{{ tendencia.total }}</td>
+                      <td class="text-end text-success fw-semibold">{{ tendencia.aprobadas }}</td>
+                      <td class="text-end text-danger">{{ tendencia.rechazadas }}</td>
+                      <td class="text-end text-warning">{{ tendencia.pendientes }}</td>
+                      <td class="text-end">
+                        <span class="badge bg-info">
+                          {{ formatPorcentaje(tendencia.tasa_aprobacion) }}
+                        </span>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              <p>No hay datos de tendencias disponibles</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Bancos -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm h-100">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0">
+            <i class="bi bi-bank me-2 text-success"></i>
+            Top 5 Bancos
+          </h5>
+        </div>
+        <div class="card-body">
+          @if (loadingTendencias) {
+            <div class="text-center py-4">
+              <div class="spinner-border spinner-border-sm text-primary"></div>
+            </div>
+          } @else if (bancosMasUsados.length > 0) {
+            <div class="list-group list-group-flush">
+              @for (banco of bancosMasUsados; track $index) {
+                <div class="list-group-item border-0 px-0 py-2">
+                  <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-2">
+                      <span class="badge bg-primary rounded-circle" style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;">
+                        {{ $index + 1 }}
+                      </span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-0 small">{{ banco.banco }}</h6>
+                      <small class="text-muted">{{ banco.total }} solicitudes</small>
+                    </div>
+                    <div class="flex-shrink-0">
+                      <span class="badge bg-success small">
+                        {{ formatPorcentaje(banco.tasa) }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-bank fs-1 d-block mb-2"></i>
+              <p class="small">No hay datos disponibles</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ranking de Asesores -->
+  <div class="row g-3 mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <h5 class="mb-0">
+            <i class="bi bi-trophy me-2 text-warning"></i>
+            Top 10 Asesores por Tasa de Aprobación
+          </h5>
+        </div>
+        <div class="card-body">
+          @if (loadingRanking) {
+            <div class="text-center py-4">
+              <div class="spinner-border spinner-border-sm text-primary"></div>
+              <p class="text-muted small mt-2">Cargando ranking...</p>
+            </div>
+          } @else if (rankingAsesores.length > 0) {
+            <div class="row g-3">
+              @for (asesor of rankingAsesores; track $index) {
+                <div class="col-md-6 col-lg-4">
+                  <div class="card border h-100">
+                    <div class="card-body">
+                      <div class="d-flex align-items-start">
+                        <div class="flex-shrink-0 me-3">
+                          <div class="rounded-circle d-flex align-items-center justify-content-center"
+                               [class.bg-warning]="$index === 0"
+                               [class.bg-secondary]="$index === 1"
+                               [class.bg-danger]="$index === 2"
+                               [class.bg-primary]="$index > 2"
+                               [class.bg-opacity-10]="$index > 2"
+                               style="width: 48px; height: 48px;">
+                            @if ($index === 0) {
+                              <i class="bi bi-trophy-fill text-warning fs-4"></i>
+                            } @else if ($index === 1) {
+                              <i class="bi bi-award-fill text-secondary fs-4"></i>
+                            } @else if ($index === 2) {
+                              <i class="bi bi-star-fill text-danger fs-4"></i>
+                            } @else {
+                              <span class="fw-bold text-primary">{{ $index + 1 }}</span>
+                            }
+                          </div>
+                        </div>
+                        <div class="flex-grow-1">
+                          <h6 class="mb-1">{{ asesor.asesor_comercial }}</h6>
+                          @if (asesor.sucursal) {
+                            <p class="text-muted small mb-2">
+                              <i class="bi bi-geo-alt"></i> {{ asesor.sucursal }}
+                            </p>
+                          }
+                          <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                              {{ asesor.aprobadas }}/{{ asesor.total_solicitudes }}
+                            </small>
+                            <span class="badge bg-success">
+                              {{ formatPorcentaje(getTasaAsesor(asesor)) }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-people fs-1 d-block mb-2"></i>
+              <p>No hay datos de asesores disponibles</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Últimas Solicitudes -->
+  <div class="row g-3 mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-white border-bottom">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+              <i class="bi bi-clock-history me-2 text-primary"></i>
+              Últimas Solicitudes
+            </h5>
+            <button class="btn btn-sm btn-outline-primary" (click)="irASolicitudes()">
+              Ver todas
+              <i class="bi bi-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          @if (loadingUltimas) {
+            <div class="text-center py-4">
+              <div class="spinner-border spinner-border-sm text-primary"></div>
+              <p class="text-muted small mt-2">Cargando solicitudes...</p>
+            </div>
+          } @else if (ultimasSolicitudes.length > 0) {
+            <div class="table-responsive">
+              <table class="table table-hover table-sm">
+                <thead>
+                  <tr>
+                    <th>Número</th>
+                    <th>Cliente</th>
+                    <th>Banco</th>
+                    <th class="text-end">Monto</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Asesor</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (solicitud of ultimasSolicitudes; track solicitud.id) {
+                    <tr>
+                      <td class="fw-semibold small">{{ solicitud.numero_solicitud }}</td>
+                      <td class="small">{{ solicitud.cliente_nombre }}</td>
+                      <td class="small">{{ solicitud.banco_solicitado }}</td>
+                      <td class="text-end small">{{ formatMoneda(solicitud.monto_solicitado) }}</td>
+                      <td>
+                        <span [class]="getEstadoClass(solicitud.estado)" class="small">
+                          {{ getEstadoTexto(solicitud.estado) }}
+                        </span>
+                      </td>
+                      <td class="small">{{ formatFecha(solicitud.fecha_solicitud) }}</td>
+                      <td class="small">{{ solicitud.asesor_comercial }}</td>
+                      <td>
+                        <button 
+                          class="btn btn-sm btn-outline-primary"
+                          (click)="verSolicitud(solicitud.id)">
+                          <i class="bi bi-eye"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <div class="text-center py-4 text-muted">
+              <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+              <p>No hay solicitudes recientes</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Acciones Rápidas -->
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm action-card">
+        <div class="card-body text-center py-4">
+          <div class="mb-3">
+            <div class="icon-wrapper mx-auto">
+              <i class="bi bi-file-text text-primary"></i>
+            </div>
+          </div>
+          <h5 class="card-title fw-bold mb-2">Gestionar Solicitudes</h5>
+          <p class="card-text text-muted mb-3 small">
+            Consulta, filtra y gestiona todas las solicitudes de crédito
+          </p>
+          <button (click)="irASolicitudes()" class="btn btn-primary px-4">
+            <i class="bi bi-arrow-right-circle me-2"></i>
+            Ver Solicitudes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card border-0 shadow-sm action-card">
+        <div class="card-body text-center py-4">
+          <div class="mb-3">
+            <div class="icon-wrapper mx-auto">
+              <i class="bi bi-cloud-upload text-success"></i>
+            </div>
+          </div>
+          <h5 class="card-title fw-bold mb-2">Cargar Datos</h5>
+          <p class="card-text text-muted mb-3 small">
+            Sube archivos Excel para procesar nuevas solicitudes
+          </p>
+          <button (click)="irAUpload()" class="btn btn-success px-4">
+            <i class="bi bi-upload me-2"></i>
+            Subir Archivo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

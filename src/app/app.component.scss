@@ -1,0 +1,24 @@
+@use '../styles/variables' as *;
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.container-fluid {
+  padding: 0;
+  min-height: calc(100vh - 56px);
+}
+
+.row {
+  margin: 0;
+  min-height: calc(100vh - 56px);
+}
+
+// Ajustes para el contenido principal
+.col-md-9,
+.col-lg-10,
+.col-12 {
+  background-color: $color-alabaster;
+  min-height: calc(100vh - 56px);
+}
