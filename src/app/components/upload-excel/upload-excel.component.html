@@ -4,10 +4,16 @@
       <i class="bi bi-cloud-upload text-orange me-2"></i>
       Subir Archivo Excel
     </h2>
-    <button (click)="volver()" class="btn btn-outline-secondary">
-      <i class="bi bi-arrow-left me-2"></i>
-      Volver
-    </button>
+    <div>
+      <button (click)="irAMisArchivos()" class="btn btn-outline-primary me-2">
+        <i class="bi bi-file-earmark-spreadsheet me-2"></i>
+        Mis Archivos
+      </button>
+      <button (click)="volver()" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-2"></i>
+        Volver
+      </button>
+    </div>
   </div>
 
   <div class="row justify-content-center">
@@ -124,7 +130,11 @@
               </div>
               
               <div class="text-center mt-3">
-                <button (click)="reset()" class="btn btn-primary">
+                <button (click)="irAMisArchivos()" class="btn btn-primary me-2">
+                  <i class="bi bi-file-earmark-spreadsheet me-2"></i>
+                  Ver Mis Archivos
+                </button>
+                <button (click)="reset()" class="btn btn-outline-primary">
                   <i class="bi bi-arrow-clockwise me-2"></i>
                   Subir otro archivo
                 </button>

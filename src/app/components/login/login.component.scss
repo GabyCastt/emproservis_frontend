@@ -67,6 +67,36 @@
         cursor: not-allowed;
       }
     }
+
+    .password-input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      input {
+        padding-right: 3rem;
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 0.5rem;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+        opacity: 0.6;
+        transition: opacity $transition-normal;
+
+        &:hover:not(:disabled) {
+          opacity: 1;
+        }
+
+        &:disabled {
+          cursor: not-allowed;
+        }
+      }
+    }
   }
 
   .error-message {
@@ -76,6 +106,14 @@
     border-radius: $border-radius-md;
     margin-bottom: $spacing-lg;
     font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: shake 0.5s;
+
+    i {
+      font-size: 1.1rem;
+    }
   }
 
   .btn-primary {
@@ -89,12 +127,46 @@
     font-weight: $font-weight-semibold;
     cursor: pointer;
     @include button-hover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    .spinner {
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      border-top-color: $color-black;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
 
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
     }
   }
+}
+
+.login-footer {
+  margin-top: $spacing-lg;
+  text-align: center;
+  
+  p {
+    color: #999;
+    font-size: 0.75rem;
+    margin: 0;
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 @include responsive(md) {

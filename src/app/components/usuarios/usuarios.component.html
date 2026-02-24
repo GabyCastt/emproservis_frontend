@@ -1,0 +1,232 @@
+<div class="usuarios-container">
+  <div class="header">
+    <h2>
+      <i class="bi bi-people-fill me-2"></i>
+      Gestión de Usuarios
+    </h2>
+    <button class="btn btn-primary" (click)="toggleFormulario()">
+      <i class="bi bi-plus-circle"></i>
+      {{ mostrarFormulario ? 'Cancelar' : 'Nuevo Usuario' }}
+    </button>
+  </div>
+
+  @if (error) {
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-circle"></i>
+      {{ error }}
+    </div>
+  }
+
+  @if (success) {
+    <div class="alert alert-success">
+      <i class="bi bi-check-circle"></i>
+      {{ success }}
+    </div>
+  }
+
+  @if (mostrarFormulario) {
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Crear Nuevo Usuario</h5>
+        <form (ngSubmit)="crearUsuario()">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="nombre" class="form-label">Nombre Completo</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="nombre"
+                [(ngModel)]="nuevoUsuario.nombre_completo"
+                name="nombre"
+                required>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input 
+                type="email" 
+                class="form-control" 
+                id="email"
+                [(ngModel)]="nuevoUsuario.email"
+                name="email"
+                required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <input 
+                type="password" 
+                class="form-control" 
+                id="password"
+                [(ngModel)]="nuevoUsuario.password"
+                name="password"
+                placeholder="Mínimo 10 caracteres"
+                minlength="10"
+                required>
+              
+              @if (nuevoUsuario.password) {
+                <div class="mt-2">
+                  <small [class]="passwordStrength.class">
+                    <strong>Fortaleza: {{ passwordStrength.text }}</strong>
+                  </small>
+                  <div class="progress mt-1" style="height: 5px;">
+                    <div 
+                      class="progress-bar" 
+                      [class.bg-danger]="passwordStrength.level <= 1"
+                      [class.bg-warning]="passwordStrength.level === 2"
+                      [class.bg-info]="passwordStrength.level === 3"
+                      [class.bg-success]="passwordStrength.level === 4"
+                      [style.width.%]="passwordStrength.level * 25">
+                    </div>
+                  </div>
+                </div>
+              }
+              
+              <small class="text-muted d-block mt-2">
+                <strong>Requisitos:</strong>
+              </small>
+              <ul class="small mb-0 ps-3">
+                <li [class.text-success]="passwordStrength.checks.length" [class.text-muted]="!passwordStrength.checks.length">
+                  <i [class]="passwordStrength.checks.length ? 'bi bi-check-circle-fill' : 'bi bi-circle'"></i>
+                  Mínimo 10 caracteres
+                </li>
+                <li [class.text-success]="passwordStrength.checks.uppercase" [class.text-muted]="!passwordStrength.checks.uppercase">
+                  <i [class]="passwordStrength.checks.uppercase ? 'bi bi-check-circle-fill' : 'bi bi-circle'"></i>
+                  Al menos una letra mayúscula
+                </li>
+                <li [class.text-success]="passwordStrength.checks.number" [class.text-muted]="!passwordStrength.checks.number">
+                  <i [class]="passwordStrength.checks.number ? 'bi bi-check-circle-fill' : 'bi bi-circle'"></i>
+                  Al menos un número
+                </li>
+                <li [class.text-success]="passwordStrength.checks.symbol" [class.text-muted]="!passwordStrength.checks.symbol">
+                  <i [class]="passwordStrength.checks.symbol ? 'bi bi-check-circle-fill' : 'bi bi-circle'"></i>
+                  Al menos un símbolo (!&#64;#$%^&*)
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="rol" class="form-label">Rol</label>
+              <select 
+                class="form-select" 
+                id="rol"
+                [(ngModel)]="nuevoUsuario.rol"
+                name="rol"
+                required>
+                @for (rol of roles; track rol.value) {
+                  <option [value]="rol.value">{{ rol.label }} - {{ rol.descripcion }}</option>
+                }
+              </select>
+              <small class="text-muted d-block mt-2">
+                <strong>Roles disponibles:</strong>
+              </small>
+              <ul class="small mb-0 ps-3">
+                <li><strong>Solo Lectura:</strong> Solo puede ver solicitudes</li>
+                <li><strong>Analista:</strong> Puede ver y subir Excel</li>
+                <li><strong>Supervisor:</strong> Puede ver, subir y cambiar estados</li>
+                <li><strong>Admin:</strong> Acceso total al sistema</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="loading">
+              <i class="bi bi-save"></i>
+              Crear Usuario
+            </button>
+            <button type="button" class="btn btn-secondary" (click)="toggleFormulario()">
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  }
+
+  @if (loading && !mostrarFormulario) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+  }
+
+  @if (!loading && usuarios.length > 0) {
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Usuario</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th>Último Login</th>
+                <th>Creado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (usuario of usuarios; track usuario.id) {
+                <tr [class.table-secondary]="!usuario.activo">
+                  <td>
+                    <strong>{{ usuario.nombre_completo }}</strong>
+                    @if (esUsuarioActual(usuario)) {
+                      <span class="badge bg-primary ms-2">Tú</span>
+                    }
+                  </td>
+                  <td>{{ usuario.email }}</td>
+                  <td>
+                    <span [class]="getRolClass(usuario.rol)">
+                      {{ getRolLabel(usuario.rol) }}
+                    </span>
+                  </td>
+                  <td>
+                    @if (usuario.activo) {
+                      <span class="badge bg-success">Activo</span>
+                    } @else {
+                      <span class="badge bg-danger">Inactivo</span>
+                    }
+                  </td>
+                  <td>{{ formatFecha(usuario.ultimo_login) }}</td>
+                  <td>{{ formatFecha(usuario.created_at) }}</td>
+                  <td>
+                    <div class="btn-group btn-group-sm">
+                      @if (!esUsuarioActual(usuario)) {
+                        <button 
+                          class="btn btn-outline-primary"
+                          (click)="cambiarEstadoUsuario(usuario)"
+                          [title]="usuario.activo ? 'Desactivar' : 'Activar'">
+                          <i [class]="usuario.activo ? 'bi bi-x-circle' : 'bi bi-check-circle'"></i>
+                        </button>
+                        <select 
+                          class="form-select form-select-sm"
+                          [value]="usuario.rol"
+                          (change)="cambiarRol(usuario, $any($event.target).value)"
+                          style="max-width: 150px;">
+                          @for (rol of roles; track rol.value) {
+                            <option [value]="rol.value">{{ rol.label }}</option>
+                          }
+                        </select>
+                      } @else {
+                        <span class="text-muted small">No puedes modificarte a ti mismo</span>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (!loading && usuarios.length === 0) {
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle"></i>
+      No hay usuarios registrados
+    </div>
+  }
+</div>

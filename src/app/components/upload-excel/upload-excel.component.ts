@@ -94,4 +94,8 @@ export class UploadExcelComponent {
   volver() {
     this.router.navigate(['/dashboard']);
   }
+
+  irAMisArchivos() {
+    this.router.navigate(['/mis-archivos']);
+  }
 }
