@@ -71,6 +71,19 @@ export interface InspeccionExcel {
   completitud_por_campo: any;
 }
 
+export interface PreviewFilas {
+  archivo: string;
+  total_filas_mostradas: number;
+  filas: any[];
+}
+
+export interface TrazaColumna {
+  columna_buscada: string;
+  encontrada: boolean;
+  razon: string;
+  detalles: any;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -107,10 +120,17 @@ export class ExcelService {
     return this.http.post<InspeccionExcel>(`${this.debugUrl}/inspeccionar`, formData);
   }
 
-  previewPrimerasFilas(file: File, n: number = 20): Observable<any> {
+  previewPrimerasFilas(file: File, n: number = 20): Observable<PreviewFilas> {
     const formData = new FormData();
     formData.append('file', file);
     const params = new HttpParams().set('n', n.toString());
-    return this.http.post(`${this.debugUrl}/preview-primeras-filas`, formData, { params });
+    return this.http.post<PreviewFilas>(`${this.debugUrl}/preview-primeras-filas`, formData, { params });
+  }
+
+  trazarColumna(file: File, nombreColumna: string): Observable<TrazaColumna> {
+    const formData = new FormData();
+    formData.append('file', file);
+    const params = new HttpParams().set('nombre_columna', nombreColumna);
+    return this.http.post<TrazaColumna>(`${this.debugUrl}/trazar-columna`, formData, { params });
   }
 }

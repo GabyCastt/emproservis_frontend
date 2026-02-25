@@ -102,6 +102,7 @@ export class SolicitudesService {
     estado?: string;
     banco?: string;
     asesor?: string;
+    upload_id?: string;
     pagina?: number;
     limite?: number;
   }): Observable<SolicitudesResponse> {
@@ -110,6 +111,7 @@ export class SolicitudesService {
       if (filtros.estado) params = params.set('estado', filtros.estado);
       if (filtros.banco) params = params.set('banco', filtros.banco);
       if (filtros.asesor) params = params.set('asesor', filtros.asesor);
+      if (filtros.upload_id) params = params.set('upload_id', filtros.upload_id);
       if (filtros.pagina) params = params.set('pagina', filtros.pagina.toString());
       if (filtros.limite) params = params.set('limite', filtros.limite.toString());
     }

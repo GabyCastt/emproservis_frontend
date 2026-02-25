@@ -15,11 +15,36 @@ export class SidebarComponent {
   get menuItems() {
     const user = this.authService.getCurrentUser();
     const items = [
-      { icon: 'bi-speedometer2', label: 'Dashboard', route: '/dashboard', roles: [] },
-      { icon: 'bi-file-text', label: 'Solicitudes', route: '/solicitudes', roles: [] },
-      { icon: 'bi-cloud-upload', label: 'Subir Excel', route: '/upload', roles: ['admin', 'analista', 'supervisor'] },
-      { icon: 'bi-file-earmark-spreadsheet', label: 'Mis Archivos', route: '/mis-archivos', roles: [] },
-      { icon: 'bi-people', label: 'Usuarios', route: '/usuarios', roles: ['admin'] }
+      { 
+        icon: 'bi-speedometer2', 
+        label: 'Dashboard', 
+        route: '/dashboard', 
+        roles: [] // Todos pueden ver el dashboard
+      },
+      { 
+        icon: 'bi-file-text', 
+        label: 'Solicitudes', 
+        route: '/solicitudes', 
+        roles: [] // Todos pueden ver solicitudes
+      },
+      { 
+        icon: 'bi-cloud-upload', 
+        label: 'Subir Excel', 
+        route: '/upload', 
+        roles: ['admin', 'analista', 'supervisor'] // Solo estos roles pueden subir
+      },
+      { 
+        icon: 'bi-file-earmark-spreadsheet', 
+        label: 'Mis Archivos', 
+        route: '/mis-archivos', 
+        roles: ['admin', 'analista', 'supervisor'] // Solo quienes pueden subir pueden ver sus archivos
+      },
+      { 
+        icon: 'bi-people', 
+        label: 'Usuarios', 
+        route: '/usuarios', 
+        roles: ['admin'] // Solo admin puede gestionar usuarios
+      }
     ];
 
     // Filtrar items según el rol del usuario

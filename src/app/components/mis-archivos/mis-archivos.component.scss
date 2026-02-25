@@ -4,6 +4,15 @@
     font-size: 0.875rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    color: #212529 !important;
+  }
+
+  thead {
+    background-color: #f8f9fa !important;
+    
+    th {
+      color: #212529 !important;
+    }
   }
 
   td {

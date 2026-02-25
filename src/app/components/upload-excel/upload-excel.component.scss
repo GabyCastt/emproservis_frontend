@@ -16,3 +16,42 @@
     background: linear-gradient(135deg, #fff9e6 0%, #ffe5b3 100%);
   }
 }
+
+// Estilos para inspección y preview
+.card-header {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  
+  h5 {
+    color: #0d6efd;
+  }
+}
+
+pre {
+  background-color: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.table-responsive {
+  max-height: 400px;
+  overflow-y: auto;
+  
+  table {
+    font-size: 0.85rem;
+    
+    th, td {
+      white-space: nowrap;
+      max-width: 200px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+.progress {
+  font-weight: 600;
+  font-size: 0.9rem;
+}

@@ -28,7 +28,7 @@ export const routes: Routes = [
   { 
     path: 'mis-archivos', 
     component: MisArchivosComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard, roleGuard(['admin', 'analista', 'supervisor'])]
   },
   { 
     path: 'usuarios', 

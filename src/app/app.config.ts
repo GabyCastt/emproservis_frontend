@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideHttpClient(
       withInterceptors([authInterceptor]),
-      withFetch()  // ✅ Habilita fetch APIs para mejor rendimiento en SSR
+      withFetch()  // Habilita fetch APIs para mejor rendimiento en SSR
     )
   ]
 };

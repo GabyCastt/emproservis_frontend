@@ -4,10 +4,54 @@
       <i class="bi bi-file-text text-orange me-2"></i>
       Solicitudes de Crédito
     </h2>
-    <button (click)="volver()" class="btn btn-outline-secondary">
-      <i class="bi bi-arrow-left me-2"></i>
-      Volver
-    </button>
+    <div class="d-flex gap-2">
+      <button 
+        *ngIf="puedeGenerarReportes"
+        (click)="generarReporte('json')" 
+        class="btn btn-outline-success">
+        <i class="bi bi-file-earmark-arrow-down me-2"></i>
+        Exportar
+      </button>
+      <button (click)="volver()" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-2"></i>
+        Volver
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de búsqueda -->
+  <div class="card border-0 shadow-sm mb-3">
+    <div class="card-body">
+      <div class="input-group">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+        <input 
+          type="text" 
+          class="form-control" 
+          [(ngModel)]="textoBusqueda"
+          (keyup.enter)="buscar()"
+          placeholder="Buscar por número de solicitud, cliente, cédula..."
+          [disabled]="buscando">
+        <button 
+          class="btn btn-primary" 
+          (click)="buscar()"
+          [disabled]="buscando">
+          <span *ngIf="!buscando">Buscar</span>
+          <span *ngIf="buscando">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Buscando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Indicador de filtro por archivo -->
+  <div *ngIf="filtroUploadId" class="alert alert-info alert-dismissible fade show" role="alert">
+    <i class="bi bi-filter-circle me-2"></i>
+    <strong>Filtrado por archivo:</strong> {{ nombreArchivoFiltrado }}
+    <button type="button" class="btn-close" (click)="limpiarFiltros()"></button>
   </div>
 
   <div class="card border-0 shadow-sm mb-4">
@@ -66,6 +110,13 @@
     </div>
   </div>
 
+  <!-- Mensaje informativo sobre permisos -->
+  <div *ngIf="!puedeCambiarEstado && solicitudes.length > 0" class="alert alert-info alert-dismissible fade show" role="alert">
+    <i class="bi bi-info-circle me-2"></i>
+    <strong>Información:</strong> Solo usuarios con rol admin o supervisor pueden cambiar el estado de las solicitudes.
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  </div>
+
   @if (loading) {
     <div class="text-center py-5">
       <div class="spinner-border text-primary" role="status">
@@ -110,6 +161,10 @@
                   <i class="bi bi-calendar me-1"></i>
                   Fecha
                 </th>
+                <th>
+                  <i class="bi bi-gear me-1"></i>
+                  Acciones
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -130,6 +185,23 @@
                   </td>
                   <td>{{ sol.asesor_comercial }}</td>
                   <td>{{ formatFecha(sol.fecha_solicitud) }}</td>
+                  <td>
+                    <div class="btn-group btn-group-sm">
+                      <button 
+                        class="btn btn-outline-primary" 
+                        (click)="verDetalle(sol.id)"
+                        title="Ver detalle">
+                        <i class="bi bi-eye"></i>
+                      </button>
+                      <button 
+                        *ngIf="puedeCambiarEstado"
+                        class="btn btn-outline-warning" 
+                        (click)="abrirModalCambioEstado(sol)"
+                        title="Cambiar estado (solo admin/supervisor)">
+                        <i class="bi bi-arrow-repeat"></i>
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               }
             </tbody>
@@ -168,4 +240,283 @@
       </div>
     </div>
   }
+</div>
+
+<!-- Modal de Detalle -->
+<div *ngIf="mostrarModalDetalle && solicitudSeleccionada" 
+     class="modal fade show d-block" 
+     tabindex="-1" 
+     style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-file-text me-2"></i>
+          Detalle de Solicitud
+        </h5>
+        <button type="button" class="btn-close" (click)="cerrarModalDetalle()"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Información General -->
+        <div class="card mb-3">
+          <div class="card-header bg-primary text-white">
+            <i class="bi bi-info-circle me-2"></i>
+            Información General
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <strong>Número de Solicitud:</strong><br>
+                <span class="text-primary">{{ solicitudSeleccionada.numero_solicitud }}</span>
+              </div>
+              <div class="col-md-6 mb-2">
+                <strong>Estado:</strong><br>
+                <span class="badge" [ngClass]="getBadgeClass(solicitudSeleccionada.estado)">
+                  {{ formatEstado(solicitudSeleccionada.estado) }}
+                </span>
+              </div>
+              <div class="col-md-6 mb-2">
+                <strong>Fecha de Solicitud:</strong><br>
+                {{ formatFecha(solicitudSeleccionada.fecha_solicitud) }}
+              </div>
+              <div class="col-md-6 mb-2">
+                <strong>Sucursal:</strong><br>
+                {{ solicitudSeleccionada.sucursal }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cliente -->
+        <div class="card mb-3" *ngIf="solicitudSeleccionada.clientes">
+          <div class="card-header bg-info text-white">
+            <i class="bi bi-person me-2"></i>
+            Información del Cliente
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <strong>Nombre Completo:</strong><br>
+                {{ solicitudSeleccionada.clientes.nombres }} {{ solicitudSeleccionada.clientes.apellidos }}
+              </div>
+              <div class="col-md-6 mb-2">
+                <strong>Cédula:</strong><br>
+                {{ solicitudSeleccionada.clientes.cedula }}
+              </div>
+              <div class="col-md-12 mb-2">
+                <strong>Email:</strong><br>
+                {{ solicitudSeleccionada.clientes.email || 'No registrado' }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehículo -->
+        <div class="card mb-3" *ngIf="solicitudSeleccionada.vehiculos">
+          <div class="card-header bg-secondary text-white">
+            <i class="bi bi-car-front me-2"></i>
+            Información del Vehículo
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <strong>Modelo:</strong><br>
+                {{ solicitudSeleccionada.vehiculos.modelo }}
+              </div>
+              <div class="col-md-6 mb-2">
+                <strong>Año:</strong><br>
+                {{ solicitudSeleccionada.vehiculos.anio }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financiamiento -->
+        <div class="card mb-3">
+          <div class="card-header bg-success text-white">
+            <i class="bi bi-currency-dollar me-2"></i>
+            Información Financiera
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <strong>Banco Solicitado:</strong><br>
+                {{ solicitudSeleccionada.banco_solicitado }}
+              </div>
+              <div class="col-md-6 mb-2">
+                <strong>Plazo:</strong><br>
+                {{ solicitudSeleccionada.plazo_meses }} meses
+              </div>
+              <div class="col-md-6 mb-2">
+                <strong>Monto Solicitado:</strong><br>
+                <span class="text-success fs-5">${{ formatMonto(solicitudSeleccionada.monto_solicitado) }}</span>
+              </div>
+              <div class="col-md-6 mb-2" *ngIf="solicitudSeleccionada.monto_aprobado">
+                <strong>Monto Aprobado:</strong><br>
+                <span class="text-primary fs-5">${{ formatMonto(solicitudSeleccionada.monto_aprobado) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Asesor -->
+        <div class="card mb-3">
+          <div class="card-header bg-warning">
+            <i class="bi bi-person-badge me-2"></i>
+            Asesor Comercial
+          </div>
+          <div class="card-body">
+            <strong>{{ solicitudSeleccionada.asesor_comercial }}</strong>
+          </div>
+        </div>
+
+        <!-- Observaciones -->
+        <div class="card mb-3" *ngIf="solicitudSeleccionada.observaciones || solicitudSeleccionada.motivo_rechazo">
+          <div class="card-header bg-light">
+            <i class="bi bi-chat-left-text me-2"></i>
+            Notas Adicionales
+          </div>
+          <div class="card-body">
+            <div *ngIf="solicitudSeleccionada.observaciones" class="mb-2">
+              <strong>Observaciones:</strong><br>
+              <p class="mb-0">{{ solicitudSeleccionada.observaciones }}</p>
+            </div>
+            <div *ngIf="solicitudSeleccionada.motivo_rechazo" class="alert alert-danger mb-0">
+              <strong>Motivo de Rechazo:</strong><br>
+              {{ solicitudSeleccionada.motivo_rechazo }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cerrarModalDetalle()">
+          Cerrar
+        </button>
+        <button 
+          *ngIf="puedeCambiarEstado" 
+          type="button" 
+          class="btn btn-warning" 
+          (click)="abrirModalCambioEstado(solicitudSeleccionada); cerrarModalDetalle()">
+          <i class="bi bi-arrow-repeat me-2"></i>
+          Cambiar Estado
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Cambio de Estado -->
+<div *ngIf="mostrarModalCambioEstado && solicitudParaCambioEstado" 
+     class="modal fade show d-block" 
+     tabindex="-1" 
+     style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title">
+          <i class="bi bi-arrow-repeat me-2"></i>
+          Cambiar Estado de Solicitud
+        </h5>
+        <button type="button" class="btn-close" (click)="cerrarModalCambioEstado()" [disabled]="cambiandoEstado"></button>
+      </div>
+      <div class="modal-body">
+        <!-- Información de la solicitud -->
+        <div class="alert alert-info mb-3">
+          <strong>Solicitud:</strong> {{ solicitudParaCambioEstado.numero_solicitud }}<br>
+          <strong>Cliente:</strong> 
+          <span *ngIf="solicitudParaCambioEstado.clientes">
+            {{ solicitudParaCambioEstado.clientes.nombres }} {{ solicitudParaCambioEstado.clientes.apellidos }}
+          </span><br>
+          <strong>Estado actual:</strong> 
+          <span class="badge" [ngClass]="getBadgeClass(solicitudParaCambioEstado.estado)">
+            {{ formatEstado(solicitudParaCambioEstado.estado) }}
+          </span>
+        </div>
+
+        <!-- Selector de nuevo estado -->
+        <div class="mb-3">
+          <label for="nuevoEstado" class="form-label">
+            <i class="bi bi-flag me-1"></i>
+            Nuevo Estado <span class="text-danger">*</span>
+          </label>
+          <select 
+            id="nuevoEstado"
+            [(ngModel)]="nuevoEstado" 
+            class="form-select"
+            [disabled]="cambiandoEstado">
+            <option value="pendiente">Pendiente</option>
+            <option value="en_revision">En Revisión</option>
+            <option value="aprobada">Aprobada</option>
+            <option value="rechazada">Rechazada</option>
+            <option value="en_proceso">En Proceso</option>
+            <option value="desembolsada">Desembolsada</option>
+            <option value="cancelada">Cancelada</option>
+          </select>
+        </div>
+
+        <!-- Motivo de rechazo (obligatorio si estado = rechazada) -->
+        <div class="mb-3" *ngIf="nuevoEstado === 'rechazada'">
+          <label for="motivoRechazo" class="form-label">
+            <i class="bi bi-x-circle me-1"></i>
+            Motivo de Rechazo <span class="text-danger">*</span>
+          </label>
+          <textarea 
+            id="motivoRechazo"
+            [(ngModel)]="motivoRechazo" 
+            class="form-control" 
+            rows="3"
+            placeholder="Explica el motivo del rechazo..."
+            [disabled]="cambiandoEstado"
+            [class.is-invalid]="nuevoEstado === 'rechazada' && !motivoRechazo.trim()"></textarea>
+          <div class="invalid-feedback">
+            El motivo de rechazo es obligatorio
+          </div>
+        </div>
+
+        <!-- Observaciones (opcional) -->
+        <div class="mb-3">
+          <label for="observaciones" class="form-label">
+            <i class="bi bi-chat-left-text me-1"></i>
+            Observaciones (opcional)
+          </label>
+          <textarea 
+            id="observaciones"
+            [(ngModel)]="observaciones" 
+            class="form-control" 
+            rows="3"
+            placeholder="Agrega observaciones adicionales..."
+            [disabled]="cambiandoEstado"></textarea>
+        </div>
+
+        <!-- Advertencia para rechazos -->
+        <div class="alert alert-warning mb-0" *ngIf="nuevoEstado === 'rechazada'">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          <strong>Atención:</strong> El motivo de rechazo será visible para el cliente y el asesor comercial.
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button 
+          type="button" 
+          class="btn btn-secondary" 
+          (click)="cerrarModalCambioEstado()"
+          [disabled]="cambiandoEstado">
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-warning" 
+          (click)="confirmarCambioEstado()"
+          [disabled]="cambiandoEstado || !nuevoEstado || (nuevoEstado === 'rechazada' && !motivoRechazo.trim())">
+          <span *ngIf="!cambiandoEstado">
+            <i class="bi bi-check-circle me-2"></i>
+            Confirmar Cambio
+          </span>
+          <span *ngIf="cambiandoEstado">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Cambiando...
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

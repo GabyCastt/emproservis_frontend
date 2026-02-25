@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ExcelService, ArchivoExcel, MisArchivosResponse } from '../../services/excel.service';
+import { SolicitudesService } from '../../services/solicitudes.service';
 import { AuthService } from '../../services/auth.service';
 import { interval, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -16,6 +17,7 @@ export class MisArchivosComponent implements OnInit {
   private excelService = inject(ExcelService);
   private router = inject(Router);
   private authService = inject(AuthService);
+  private solicitudesService = inject(SolicitudesService);
 
   archivos: ArchivoExcel[] = [];
   loading = false;
@@ -30,8 +32,15 @@ export class MisArchivosComponent implements OnInit {
   // Polling para actualizar estados
   private pollingSubscription?: Subscription;
 
+  // Modal de solicitudes del archivo
+  mostrarModalSolicitudes = false;
+  solicitudesDelArchivo: any[] = [];
+  archivoSeleccionado: ArchivoExcel | null = null;
+  estadoDetalladoArchivo: any = null;
+  cargandoSolicitudes = false;
+
   get puedeEliminar(): boolean {
-    return this.authService.hasRole(['admin', 'supervisor']);
+    return this.authService.hasRole(['admin']);
   }
 
   ngOnInit() {
@@ -108,6 +117,9 @@ export class MisArchivosComponent implements OnInit {
         this.archivos = this.archivos.filter(a => a.id !== uploadId);
         this.total--;
         
+        // Mostrar mensaje de éxito
+        this.mostrarMensajeExito(`Archivo "${nombreArchivo}" eliminado correctamente`);
+        
         // Recargar la lista completa para asegurar sincronización
         setTimeout(() => {
           this.cargarArchivos();
@@ -133,22 +145,126 @@ export class MisArchivosComponent implements OnInit {
           errorMsg = err.error.detail;
         }
         
-        alert(`❌ Error al eliminar\n\n${errorMsg}`);
+        alert(`Error al eliminar\n\n${errorMsg}`);
       }
     });
   }
 
+  mostrarMensajeExito(mensaje: string) {
+    // Crear elemento de alerta
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg';
+    alertDiv.style.zIndex = '9999';
+    alertDiv.style.minWidth = '400px';
+    alertDiv.innerHTML = `
+      <i class="bi bi-check-circle-fill me-2"></i>
+      <strong>¡Éxito!</strong> ${mensaje}
+      <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+    
+    document.body.appendChild(alertDiv);
+    
+    // Auto-remover después de 4 segundos
+    setTimeout(() => {
+      alertDiv.classList.remove('show');
+      setTimeout(() => alertDiv.remove(), 150);
+    }, 4000);
+  }
+
   verDetalles(uploadId: string) {
+    const archivo = this.archivos.find(a => a.id === uploadId);
+    if (!archivo) return;
+
+    this.archivoSeleccionado = archivo;
+    this.mostrarModalSolicitudes = true;
+    this.cargandoSolicitudes = true;
+    this.solicitudesDelArchivo = [];
+    this.estadoDetalladoArchivo = null;
+
+    // Cargar estado detallado del archivo
     this.excelService.obtenerEstado(uploadId).subscribe({
       next: (estado) => {
-        console.log('Estado del archivo:', estado);
-        // Aquí podrías abrir un modal con los detalles
-        alert(JSON.stringify(estado, null, 2));
+        console.log('Estado detallado del archivo:', estado);
+        this.estadoDetalladoArchivo = estado;
       },
       error: (err) => {
-        alert(err.error?.detail || 'Error al obtener el estado');
+        console.error('Error al obtener estado detallado:', err);
       }
     });
+
+    // Cargar solicitudes del archivo
+    console.log('Cargando solicitudes para upload_id:', uploadId);
+    this.solicitudesService.listar({
+      upload_id: uploadId,
+      limite: 100
+    }).subscribe({
+      next: (response) => {
+        console.log(`Solicitudes recibidas: ${response.solicitudes.length}, Esperadas: ${archivo.filas_exitosas}`);
+        this.solicitudesDelArchivo = response.solicitudes;
+        this.cargandoSolicitudes = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar solicitudes:', err);
+        this.cargandoSolicitudes = false;
+        this.mostrarAlertaError('Error al cargar las solicitudes del archivo');
+      }
+    });
+  }
+
+  cerrarModalSolicitudes() {
+    this.mostrarModalSolicitudes = false;
+    this.archivoSeleccionado = null;
+    this.solicitudesDelArchivo = [];
+    this.estadoDetalladoArchivo = null;
+  }
+
+  formatMonto(monto: number): string {
+    return new Intl.NumberFormat('es-EC').format(monto);
+  }
+
+  formatEstado(estado: string): string {
+    const estados: any = {
+      'pendiente': 'Pendiente',
+      'en_revision': 'En Revisión',
+      'aprobada': 'Aprobada',
+      'rechazada': 'Rechazada',
+      'en_proceso': 'En Proceso',
+      'desembolsada': 'Desembolsada',
+      'cancelada': 'Cancelada'
+    };
+    return estados[estado] || estado;
+  }
+
+  getBadgeClass(estado: string): string {
+    const classes: any = {
+      'pendiente': 'bg-warning',
+      'en_revision': 'bg-info',
+      'aprobada': 'bg-success',
+      'rechazada': 'bg-danger',
+      'en_proceso': 'bg-primary',
+      'desembolsada': 'bg-success',
+      'cancelada': 'bg-secondary'
+    };
+    return classes[estado] || 'bg-secondary';
+  }
+
+  mostrarAlertaError(mensaje: string) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 shadow-lg';
+    alertDiv.style.zIndex = '9999';
+    alertDiv.style.minWidth = '400px';
+    alertDiv.innerHTML = `
+      <i class="bi bi-exclamation-triangle-fill me-2"></i>
+      ${mensaje}
+      <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+    
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+      alertDiv.classList.remove('show');
+      setTimeout(() => alertDiv.remove(), 150);
+    }, 4000);
   }
 
   cambiarPagina(pagina: number) {

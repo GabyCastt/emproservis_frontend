@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ExcelService, UploadResponse } from '../../services/excel.service';
+import { ExcelService, UploadResponse, InspeccionExcel, PreviewFilas } from '../../services/excel.service';
 
 @Component({
   selector: 'app-upload-excel',
@@ -18,6 +18,19 @@ export class UploadExcelComponent {
   uploadResult: UploadResponse | null = null;
   error = '';
   isDragging = false;
+
+  // Inspección
+  inspeccionando = false;
+  inspeccionResult: InspeccionExcel | null = null;
+  mostrarInspeccion = false;
+  
+  // Preview
+  previewing = false;
+  previewResult: PreviewFilas | null = null;
+  mostrarPreview = false;
+
+  // Helper para templates
+  Object = Object;
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -58,6 +71,66 @@ export class UploadExcelComponent {
     this.selectedFile = file;
     this.error = '';
     this.uploadResult = null;
+    this.inspeccionResult = null;
+    this.previewResult = null;
+    this.mostrarInspeccion = false;
+    this.mostrarPreview = false;
+  }
+
+  inspeccionarArchivo() {
+    if (!this.selectedFile) return;
+
+    this.inspeccionando = true;
+    this.error = '';
+
+    this.excelService.inspeccionarArchivo(this.selectedFile).subscribe({
+      next: (result) => {
+        this.inspeccionResult = result;
+        this.mostrarInspeccion = true;
+        this.inspeccionando = false;
+      },
+      error: (err) => {
+        this.error = err.error?.detail || 'Error al inspeccionar el archivo';
+        this.inspeccionando = false;
+      }
+    });
+  }
+
+  previewArchivo() {
+    if (!this.selectedFile) return;
+
+    this.previewing = true;
+    this.error = '';
+
+    this.excelService.previewPrimerasFilas(this.selectedFile, 10).subscribe({
+      next: (result) => {
+        this.previewResult = result;
+        this.mostrarPreview = true;
+        this.previewing = false;
+      },
+      error: (err) => {
+        this.error = err.error?.detail || 'Error al previsualizar el archivo';
+        this.previewing = false;
+      }
+    });
+  }
+
+  getVeredictoBadgeClass(veredicto: string): string {
+    const classes: { [key: string]: string } = {
+      'listo': 'badge bg-success',
+      'advertencia': 'badge bg-warning text-dark',
+      'no_importar': 'badge bg-danger'
+    };
+    return classes[veredicto] || 'badge bg-secondary';
+  }
+
+  getVeredictTexto(veredicto: string): string {
+    const textos: { [key: string]: string } = {
+      'listo': 'Listo para importar',
+      'advertencia': 'Advertencias detectadas',
+      'no_importar': 'No importar'
+    };
+    return textos[veredicto] || veredicto;
   }
 
   uploadFile() {
@@ -88,7 +161,11 @@ export class UploadExcelComponent {
   reset() {
     this.selectedFile = null;
     this.uploadResult = null;
+    this.inspeccionResult = null;
+    this.previewResult = null;
     this.error = '';
+    this.mostrarInspeccion = false;
+    this.mostrarPreview = false;
   }
 
   volver() {
